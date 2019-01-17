@@ -1,0 +1,144 @@
+body {
+    /*padding: 50px;*/
+    font-family: SFNSText, Helvetica Neue, sans-serif;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+a {
+    color: #00B7FF;
+}
+
+#app {
+    padding: 10px;
+    overflow: hidden;
+    background: #ccc;
+    min-width: 600px;
+    min-height: 500px;
+    background: url("../images/canvas_bg.jpg") repeat;
+}
+
+#app .left, #app .center, #app .right {
+    float: left;
+    overflow: auto;
+
+}
+
+#app .left, #app .right {
+    background-color: #fff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+#app .center {
+    /*border: #000 solid 1px;*/
+    /*background-color: white;*/
+    overflow: auto;
+    text-align: center;
+}
+
+#app .card {
+    background-color: white;
+    /*background: url("../images/card_bg.png") repeat white;*/
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+#app .pro-box {
+    border-top: #ccc 1px dashed;
+    user-select: none;
+}
+
+#app .pro-box:first-child {
+    border-top: none;
+}
+
+#app .pro-box .title {
+    /*fontawesome-free-5.6.3-weight: 300;*/
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.pro-box .item {
+    display: table;
+    padding: 10px;
+    width: calc(100% - 20px);
+}
+
+.pro-box .item .key {
+    display: table-cell;
+    text-align: right;
+    font-weight: 300;
+    /*color: #cfcfcf;*/
+}
+
+.pro-box .item .value {
+    display: table-cell;
+    width: 170px;
+}
+
+.pro-box .item .value input {
+    width: 50px;
+}
+
+
+
+.card .active {
+    /*border: #00B7FF 2px dashed;*/
+}
+
+.popup-menu {
+    padding: 3px 0px;
+    position: fixed;
+    background: #FFF;
+    border-radius: 4px;
+    border: 1px solid rgb(180, 180, 180);
+    -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    user-select: none;
+}
+
+.popup-menu .item {
+    padding: 5px 10px;
+    min-width: 100px;
+    width: 180px;
+    position: relative;
+    color: #333;
+    text-shadow: none;
+}
+.popup-menu .item .fa{
+    margin-right: 10px;
+}
+
+.popup-menu .item:hover {
+    background-color: #eee;
+}
+
+.popup-menu .split {
+    height: 0px;
+    border-top: #ccc solid 1px;
+    margin: 4px 0;
+}
+.disable *{
+    pointer-events: none;
+}
+.shape {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    user-select: none;
+    border: #000 2px solid;
+    /*overflow: hidden;*/
+    outline: none;
+}
+.shape *:not(.border){
+    max-width: 100%;
+    max-height: 100%;
+}
+

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphic Design</title>
+    <link rel='stylesheet' href='/design/fontawesome-free-5.6.3/css/all.min.css'/>
+    <link rel='stylesheet' href='/design/css/style.css'/>
+    <link rel='stylesheet' href='/design/css/resize.css'/>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+
+<div id="app" :style="{height:layout.height+'px'}">
+    <div class="left"
+         :style="{width:layout.left+'px',height:(layout.height-22)+'px','margin-right':layout.margin+'px'}">
+        <div class="pro-box">
+            <div class="title">属性设置</div>
+
+            <div class="item">
+                <div class="key">名称：</div>
+                <div class="value">
+                    <input type="input" v-model="card.name" placeholder="名称"/>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="key">宽度：</div>
+                <div class="value">
+                    <input type="input" v-model="card.width" placeholder="宽度"/>
+                </div>
+            </div>
+            <div class="item">
+                <div class="key">高度：</div>
+                <div class="value">
+                    <input type="input" v-model="card.height" placeholder="宽度"/>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="key">背景：</div>
+                <div class="value">
+                    <input type="input"/>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="pro-box">
+            <div class="title">标签设置</div>
+            <div class="item">
+                <div class="key">名称：</div>
+                <div class="value">
+                    <input type="input"/>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="pro-box">
+            <div class="title">形状</div>
+        </div>
+
+    </div>
+    <div class="center"
+         :style="{width:layout.center+'px',height:(layout.height-22)+'px','margin-right':layout.margin+'px'}">
+
+        <div v-selectarea="{aa:123}" tabindex="0" class="card" :style="{width:card.width+'px',height:card.height+'px'}" @click="cardClick($event)" @keydown="shapeMove($event)" @keyup="cardKeyup($event)">
+
+
+            <!-- 各种元素 -->
+            <shape v-for="(shape,index) in shapes" :data-index="index"  :shape="shape"
+                   @contextmenu.prevent.native="showContextmenu($event,shape)"
+                   @focus.prevent.stop.native="selectShape($event,shape)"
+                   @click.prevent.stop.native="selectShape($event,shape)"
+                   v-drag="{shape:shape}"
+                   @move="componnetsMove"></shape>
+
+            <!-- 选区 -->
+            <div v-if="selectArea.show" :style="{left:selectArea.x+'px',top:selectArea.y+'px',width:selectArea.width+'px',height:selectArea.height+'px'}" class="select-area"></div>
+        </div>
+
+    </div>
+    <div class="right" :style="{width:layout.right+'px',height:(layout.height-22)+'px'}">
+
+        <div :class="{disable:!isSelected}">
+            <div class="pro-box">
+                <div class="title">基本设置</div>
+                <div class="item">
+                    <div class="key">宽度：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.width" placeholder="宽度"/>
+                        <span>px</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">高度：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.height" placeholder="宽度"/>
+                        <span>px</span>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="key">类型：</div>
+                    <div class="value">
+                        <select>
+                            <option>文本</option>
+                            <option>图片</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">值：</div>
+                    <div class="value">
+                        <input type="input" v-model="selected.value" placeholder=""/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-box">
+                <div class="title">坐标设置</div>
+                <div class="item">
+                    <div class="key">X：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.left"/>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">Y：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.top"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-box">
+                <div class="title">边框效果</div>
+                <div class="item">
+                    <div class="key">线宽：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.borderWidth" placeholder="线宽"/>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">颜色：</div>
+                    <div class="value">
+                        <input type="color" v-model="selected.borderColor" placeholder="颜色"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-box">
+            <div class="title">字体效果</div>
+
+            <div class="item">
+                <div class="key">颜色：</div>
+                <div class="value">
+                    <input type="color" v-model="selected.fontColor" placeholder="颜色"/>
+                </div>
+            </div>
+            <div class="item">
+                <div class="key">大小：</div>
+                <div class="value">
+                    <input type="number" v-model="selected.fontSize" placeholder="大小"/>
+                </div>
+            </div>
+            <div class="item">
+                <div class="key">样式：</div>
+                <div class="value">
+                    <select>
+                        <option>正常</option>
+                        <option>粗体</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div v-if="popup.show" :style="{top:popup.top+'px',left:popup.left+'px'}" class="popup-menu">
+        <div class="item" @click="popup.cut()"><span class="fa fa-cut"></span>剪切</div>
+        <div class="item" @click="popup.copy()"><span class="fa fa-copy"></span>复制</div>
+        <div class="item" @click="popup.del()"><span class="fa fa-unlink"></span>删除</div>
+        <div class="split"></div>
+        <div class="item" @click="popup.up()"><span class="fa fa-angle-up"></span>置于顶层</div>
+        <div class="item" @click="popup.down()"><span class="fa fa-angle-down"></span>置于底层</div>
+    </div>
+
+</div>
+</body>
+
+<script type="text/javascript" src="/design/js/index.js"></script>
+</html>

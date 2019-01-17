@@ -1,0 +1,31 @@
+.border{
+    border: #4a98be 1px solid;
+    position: absolute;
+    left: -7px;
+    right: -7px;
+    top: -7px;
+    bottom: -7px;
+    display: none;
+    z-index: 99;
+}
+.active .direction,.active .border{
+    display: block;
+}
+.direction{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border: 1px #4a98be solid;
+    background-color: #7fd6ff;
+    display: none;
+    z-index: 100;
+}
+
+.nw{left: -10px; top: -10px; cursor: nw-resize}
+.w{left: -10px; top: 50%; margin-top: -3px; cursor: w-resize}
+.ws{left: -10px; bottom: -10px; cursor: sw-resize}
+.s{left: 50%; bottom: -10px; margin-left: -3px; cursor: s-resize}
+.se{right: -10px; bottom: -10px; cursor: se-resize}
+.e{right: -10px; top: 50%; margin-top: -3px; cursor: e-resize}
+.ne{right: -10px; top: -10px; cursor: ne-resize}
+.n{top:-10px;left: 50%;margin-left: -3px;cursor: n-resize}
