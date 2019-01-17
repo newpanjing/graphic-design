@@ -46,6 +46,12 @@ a {
     position: relative;
     overflow: hidden;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    outline: none;
+    border: 2px #fff solid;
+}
+
+#app .card:focus {
+    border: 2px #6db7ff solid;
 }
 
 #app .pro-box {
@@ -86,7 +92,6 @@ a {
 }
 
 
-
 .card .active {
     /*border: #00B7FF 2px dashed;*/
 }
@@ -112,7 +117,8 @@ a {
     color: #333;
     text-shadow: none;
 }
-.popup-menu .item .fa{
+
+.popup-menu .item .fa {
     margin-right: 10px;
 }
 
@@ -125,9 +131,11 @@ a {
     border-top: #ccc solid 1px;
     margin: 4px 0;
 }
-.disable *{
+
+.disable * {
     pointer-events: none;
 }
+
 .shape {
     width: 100px;
     height: 100px;
@@ -137,7 +145,8 @@ a {
     /*overflow: hidden;*/
     outline: none;
 }
-.shape *:not(.border){
+
+.shape *:not(.border) {
     max-width: 100%;
     max-height: 100%;
 }

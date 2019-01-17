@@ -2,8 +2,6 @@
  * 初始化布局UI
  */
 function frameInit() {
-    console.log('frame init.')
-
 
     initSelectArea();
     initDrag();
@@ -11,23 +9,40 @@ function frameInit() {
     initApp();
     initLayout();
 
+    document.addEventListener('click', function () {
+
+        app.popup.show = false;
+        app.cardPopup.show = false;
+    });
+
     for (var i = 0; i < 10; i++) {
         app.shapes.push({
+            id: getShapeId(),
             left: i * 3 * 10,
             top: i * 3 * 10,
             width: 60,
             height: 60,
             active: false,
             value: i,
-            position: {}
         })
     }
+}
+
+/**
+ * 获取一个随机数id，18位
+ * @returns {string}
+ */
+function getShapeId() {
+    return new Date().getTime() + "" + Math.floor(Math.random() * 89999 + 10000);
 }
 
 function initSelectArea() {
     Vue.directive('selectarea', {
         inserted(el, binding) {
             new SelectArea({
+                onBegin: function () {
+
+                },
                 onHandler: function (data) {
                     app.shapes.forEach(item => {
                         //计算出每个item的x1 x2 y1 y2
@@ -39,6 +54,9 @@ function initSelectArea() {
                         item.active = crash;
                         item.selectArea = crash;
                     });
+
+                },
+                onEnd: function () {
 
                 }
             }).register(el);
@@ -52,15 +70,37 @@ function initDrag() {
         inserted(dv, binding) {
             var drag = new Drag({
                 onBegin: function (data) {
-                    //所有选中的 记录下旧的坐标
-                    app.shapes.forEach(item => {
-                        if (item.active) {
-                            item.oldLeft = item.left;
-                            item.oldTop = item.top;
+
+                    var id = parseInt(dv.getAttribute('data-id'));
+
+
+                    var self = {}
+                    for (var i = 0; i < app.shapes.length; i++) {
+                        var item = app.shapes[i];
+                        if (item.id == id) {
+                            self = item;
+                            break;
                         }
-                    });
-                    var index = parseInt(dv.getAttribute('data-index'));
-                    app.shapes[index].active = true;
+                    }
+                    self.active = true;
+
+                    if (!self.selectArea) {
+                        app.shapes.forEach(item => {
+                            if (item != self) {
+                                item.selectArea = false;
+                                item.active = false;
+                            }
+                        })
+                    } else {
+                        //所有选中的 记录下旧的坐标
+                        app.shapes.forEach(item => {
+                            if (item.active) {
+                                item.oldLeft = item.left;
+                                item.oldTop = item.top;
+                            }
+                        });
+                    }
+
                 },
                 onEnd: function (data) {
                     app.shapes.forEach(item => {
@@ -102,7 +142,7 @@ function initDrag() {
 
 function moveLeft(val) {
     app.shapes.forEach(item => {
-        if (item.active && item.selectArea) {
+        if (item.active) {
             item.left += val;
         }
     });
@@ -110,7 +150,7 @@ function moveLeft(val) {
 
 function moveTop(val) {
     app.shapes.forEach(item => {
-        if (item.active && item.selectArea) {
+        if (item.active) {
             item.top += val;
         }
     });
@@ -130,19 +170,21 @@ function initApp() {
             },
             card: {
                 width: 500,
-                height: 700
+                height: 700,
+                name: ''
             },
             selected: {},
             isSelected: false,
             shapes: [{
+                id: 1,
                 left: 10,
                 top: 20,
                 width: 200,
                 height: 60,
                 active: false,
                 value: 'sd',
-                position: {}
             }, {
+                id: 2,
                 left: 30,
                 top: 50,
                 width: 50,
@@ -157,47 +199,61 @@ function initApp() {
                 fontSize: 12,
                 fontStyle: '',
                 value: '文本标签',
-                position: {}
             }],
+            cardPopup: {
+                show: false,
+                left: 0,
+                top: 0,
+                menus: [{
+                    text: '全选',
+                    icon: 'fa-check',
+                    handler: function () {
+                        app.selectAll();
+                    }
+                }, {
+                    text: '取消全选',
+                    icon: 'fa-times',
+                    handler: function () {
+                        app.unselectAll();
+                    }
+                }]
+            },
             popup: {
                 show: false,
                 left: 0,
                 top: 0,
-                data: {},
-                cut: function () {
-                    console.log('cut')
-                    console.log(this.data)
-                    this.show = false;
-                },
-                copy: function () {
-                    console.log('copy')
+                menus: [{
+                    text: '删除',
+                    icon: 'fa-unlink',
+                    show: true,
+                    handler: function () {
+                        if (confirm('您确定要删除选中的元素吗？')) {
 
+                            for (var i = 0; i < app.shapes.length; i++) {
+                                if (app.shapes[i].active) {
+                                    app.shapes.splice(i--, 1);
+                                }
+                            }
 
-                    this.show = false;
-                },
-                del: function () {
-                    for (var i = 0; i < app.shapes.length; i++) {
-                        var item = app.shapes[i];
-                        if (item == this.data) {
-                            app.shapes.splice(i, 1);
-                            break;
+                            app.selected = {};
                         }
+
                     }
-                    this.show = false;
-                },
-                up: function () {
-                    this.show = false;
-                },
-                down: function () {
-                    this.show = false;
-                }
-            },
-            selectArea: {
-                show: false,
-                x: 0,
-                y: 0,
-                width: 0,
-                height: 0
+                }, {
+                    split: true
+                }, {
+                    text: '置于顶层',
+                    icon: 'fa-angle-up',
+                    handler: function () {
+
+                    }
+                }, {
+                    text: '置于底层',
+                    icon: 'fa-angle-down',
+                    handler: function () {
+
+                    }
+                }]
             },
             isShiftDown: false
         },
@@ -216,23 +272,23 @@ function initApp() {
         },
         methods: {
             cardClick: function (e) {
-
-                var area = app.selectArea;
-
-                app.shapes.forEach(item => item.active = false);
+                if(e.button!=0){
+                    return;
+                }
+                app.shapes.forEach(item => {
+                    item.active = false;
+                    item.selectArea = false;
+                });
                 app.popup.show = false;
                 app.selected = {}
-            },
-            componnetsMove: function (data) {
-                // app.shapes.forEach(item => {
-                //     if (item.active) {
-                //         item.left -= data.x;
-                //         item.top -= data.y;
-                //     }
-                // })
+
             },
             selectShape: function (e, shape) {
-                this.shapes.forEach(item => item.active = false);
+                this.shapes.forEach(item => {
+                    if (!item.selectArea) {
+                        item.active = false
+                    }
+                });
                 shape.active = true;
                 e.preventDefault();
                 this.selected = shape;
@@ -243,15 +299,44 @@ function initApp() {
                 app.popup.top = e.clientY;
                 app.popup.show = true;
                 app.popup.data = data;
+
+                app.cardPopup.show = false;
+            },
+            showCardMenu: function (e) {
+                var cardMenu = app.cardPopup;
+                cardMenu.left = e.clientX;
+                cardMenu.top = e.clientY;
+                cardMenu.show = true;
+                app.popup.show = false;
             },
             cardKeyup: function (e) {
                 if (e.keyCode == 9) {
                     app.isShiftDown = false;
                 }
             },
+            selectAll:function(){
+                app.shapes.forEach(item => {
+                    item.active = true;
+                    item.selectArea = true;
+                });
+            },
+            unselectAll:function(){
+                app.shapes.forEach(item => {
+                    item.active = false;
+                    item.selectArea = false;
+                });
+            },
             shapeMove: function (e, data, index) {
                 var code = e.keyCode;
-                console.log(code)
+                if (e.ctrlKey && code == 65) {
+                    this.selectAll();
+                    return;
+                }
+
+                if (e.ctrlKey && code == 68) {
+                    this.unselectAll();
+                    return;
+                }
                 var keymaps = {
                     37: () => moveLeft(-1),
                     38: () => moveTop(-1),
@@ -260,19 +345,10 @@ function initApp() {
                     9: () => app.isShiftDown = true,
                     8: function () {
 
-                        if (confirm('您确定要删除选中的元素吗？')) {
-
-                            for (var i = 0; i < app.shapes.length; i++) {
-                                if (app.shapes[i].active) {
-                                    app.shapes.splice(i--, 1);
-                                }
-                            }
-
-                            app.selected = {};
-                        }
+                        app.popup.del();
                     },
 
-                }
+                };
                 var fun = keymaps[code];
                 if (fun) {
                     fun.call(data, index);

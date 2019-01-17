@@ -41,8 +41,8 @@
                     <input type="input"/>
                 </div>
             </div>
-
         </div>
+
 
         <div class="pro-box">
             <div class="title">标签设置</div>
@@ -63,19 +63,16 @@
     <div class="center"
          :style="{width:layout.center+'px',height:(layout.height-22)+'px','margin-right':layout.margin+'px'}">
 
-        <div v-selectarea="{aa:123}" tabindex="0" class="card" :style="{width:card.width+'px',height:card.height+'px'}" @click="cardClick($event)" @keydown="shapeMove($event)" @keyup="cardKeyup($event)">
-
+        <div @contextmenu.prevent.stop="showCardMenu($event)" v-selectarea="{aa:123}" tabindex="0" class="card" :style="{width:card.width+'px',height:card.height+'px'}"
+             @mousedown="cardClick($event)" @keydown="shapeMove($event)" @keyup="cardKeyup($event)">
 
             <!-- 各种元素 -->
-            <shape v-for="(shape,index) in shapes" :data-index="index"  :shape="shape"
-                   @contextmenu.prevent.native="showContextmenu($event,shape)"
-                   @focus.prevent.stop.native="selectShape($event,shape)"
+            <shape v-for="(shape,index) in shapes" :data-id="shape.id" :shape="shape"
+                   @contextmenu.prevent.stop.native="showContextmenu($event,shape)"
                    @click.prevent.stop.native="selectShape($event,shape)"
-                   v-drag="{shape:shape}"
-                   @move="componnetsMove"></shape>
+                   v-drag="{shape:shape}"></shape>
 
-            <!-- 选区 -->
-            <div v-if="selectArea.show" :style="{left:selectArea.x+'px',top:selectArea.y+'px',width:selectArea.width+'px',height:selectArea.height+'px'}" class="select-area"></div>
+
         </div>
 
     </div>
@@ -149,40 +146,45 @@
             </div>
 
             <div class="pro-box">
-            <div class="title">字体效果</div>
+                <div class="title">字体效果</div>
 
-            <div class="item">
-                <div class="key">颜色：</div>
-                <div class="value">
-                    <input type="color" v-model="selected.fontColor" placeholder="颜色"/>
+                <div class="item">
+                    <div class="key">颜色：</div>
+                    <div class="value">
+                        <input type="color" v-model="selected.fontColor" placeholder="颜色"/>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">大小：</div>
+                    <div class="value">
+                        <input type="number" v-model="selected.fontSize" placeholder="大小"/>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="key">样式：</div>
+                    <div class="value">
+                        <select>
+                            <option>正常</option>
+                            <option>粗体</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="item">
-                <div class="key">大小：</div>
-                <div class="value">
-                    <input type="number" v-model="selected.fontSize" placeholder="大小"/>
-                </div>
-            </div>
-            <div class="item">
-                <div class="key">样式：</div>
-                <div class="value">
-                    <select>
-                        <option>正常</option>
-                        <option>粗体</option>
-                    </select>
-                </div>
-            </div>
-        </div>
         </div>
     </div>
 
     <div v-if="popup.show" :style="{top:popup.top+'px',left:popup.left+'px'}" class="popup-menu">
-        <div class="item" @click="popup.cut()"><span class="fa fa-cut"></span>剪切</div>
-        <div class="item" @click="popup.copy()"><span class="fa fa-copy"></span>复制</div>
-        <div class="item" @click="popup.del()"><span class="fa fa-unlink"></span>删除</div>
-        <div class="split"></div>
-        <div class="item" @click="popup.up()"><span class="fa fa-angle-up"></span>置于顶层</div>
-        <div class="item" @click="popup.down()"><span class="fa fa-angle-down"></span>置于底层</div>
+        <div v-for="item in popup.menus">
+            <div v-if="item.split" class="split"></div>
+            <div v-else class="item" @click="item.handler()"><span :class="'fa '+item.icon"></span>{{item.text}}</div>
+        </div>
+    </div>
+
+    <div v-if="cardPopup.show" :style="{top:cardPopup.top+'px',left:cardPopup.left+'px'}" class="popup-menu">
+        <div v-for="item in cardPopup.menus">
+            <div v-if="item.split" class="split"></div>
+            <div v-else class="item" @click="item.handler()"><span :class="'fa '+item.icon"></span>{{item.text}}</div>
+        </div>
     </div>
 
 </div>

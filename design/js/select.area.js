@@ -17,12 +17,14 @@ function SelectArea(options) {
 
             var tempX = x - e.target.offsetLeft;
             var tempY = y - e.target.offsetTop;
-            console.log(tempX)
             var isDown = true;
 
             x = tempX;
             y = tempY;
 
+            if(options && options.onBegin){
+                options.onBegin.call(el, e);
+            }
             var select = document.createElement('div');
 
             select.style.position = 'absolute';
@@ -73,10 +75,16 @@ function SelectArea(options) {
                     })
                 }
             }
-            window.onmouseup = function () {
+            window.onmouseup = function (ee) {
                 isDown = false;
                 select.remove();
+                if(options && options.onEnd){
+                    options.onEnd.call(el, e);
+                }
+                return false;
             }
+
+            return false;
         });
     }
 }

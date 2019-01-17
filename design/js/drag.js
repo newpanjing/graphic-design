@@ -38,7 +38,6 @@ function Drag(options) {
             isDown = true;
             //设置样式
             el.style.cursor = 'move';
-            console.log('按下')
 
             var nl = x, nt = y;
 
