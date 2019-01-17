@@ -16,16 +16,38 @@ function frameInit() {
     });
 
     for (var i = 0; i < 10; i++) {
-        app.shapes.push({
-            id: getShapeId(),
+        pushShape({
             left: i * 3 * 10,
             top: i * 3 * 10,
             width: 60,
             height: 60,
-            active: false,
             value: i,
         })
     }
+}
+
+function pushShape(data) {
+    //一个随机不重复的id，用于当前判断
+    data.id = getShapeId();
+    data.active = false;
+    data.selectArea = false;
+
+    var defaultData = {
+        borderWidth: 1,
+        borderColor: '#000',
+        borderStyle: 'solid',
+
+        fontColor: '#000',
+        fontSize: 12,
+        fontStyle: '',
+        value: '文本标签',
+    }
+    for(var key in defaultData){
+        if(!data[key]){
+            data[key] = defaultData[key];
+        }
+    }
+    app.shapes.push(data);
 }
 
 /**
@@ -175,31 +197,7 @@ function initApp() {
             },
             selected: {},
             isSelected: false,
-            shapes: [{
-                id: 1,
-                left: 10,
-                top: 20,
-                width: 200,
-                height: 60,
-                active: false,
-                value: 'sd',
-            }, {
-                id: 2,
-                left: 30,
-                top: 50,
-                width: 50,
-                height: 50,
-                active: false,
-
-                borderWidth: 0,
-                borderColor: '',
-                borderStyle: 'solid',
-
-                fontColor: '',
-                fontSize: 12,
-                fontStyle: '',
-                value: '文本标签',
-            }],
+            shapes: [],
             cardPopup: {
                 show: false,
                 left: 0,
@@ -272,7 +270,7 @@ function initApp() {
         },
         methods: {
             cardClick: function (e) {
-                if(e.button!=0){
+                if (e.button != 0) {
                     return;
                 }
                 app.shapes.forEach(item => {
@@ -314,13 +312,13 @@ function initApp() {
                     app.isShiftDown = false;
                 }
             },
-            selectAll:function(){
+            selectAll: function () {
                 app.shapes.forEach(item => {
                     item.active = true;
                     item.selectArea = true;
                 });
             },
-            unselectAll:function(){
+            unselectAll: function () {
                 app.shapes.forEach(item => {
                     item.active = false;
                     item.selectArea = false;
