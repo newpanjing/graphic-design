@@ -4,7 +4,7 @@
  */
 
 var http = require('http');
-var baseDir = 'public';
+var baseDir = '';
 var path = require('path');
 var fs = require('fs');
 
