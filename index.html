@@ -65,12 +65,18 @@
             </div>
         </div>
 
-        <!--<div class="pro-box">-->
-            <!--<div class="title">元素列表</div>-->
-            <!--<div class="node-list">-->
-                <!--<div v-for="item in shapes">{{item.value}}</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="pro-box">
+            <div class="title">元素列表</div>
+            <div class="node-list">
+                <div v-if="shapes.length==0" class="empty">没有任何元素</div>
+                <div v-for="item in shapes" :class="{node:true,active:item.active}" @click="selectShape($event,item)">
+                    <div v-if="item.type==1">
+                        <img :src="item.value" width="20" height="20"/><span>图片</span>
+                    </div>
+                    <div v-else class="text">{{item.value}}</div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div class="center"

@@ -156,12 +156,13 @@ a {
     overflow: hidden;
     text-align: left;
 }
-.pro-box textarea{
+
+.pro-box textarea {
     width: 165px;
     height: 175px;
 }
 
-.shape .image,.shape .image img {
+.shape .image, .shape .image img {
     height: 100%;
     width: 100%;
 }
@@ -214,4 +215,30 @@ a {
 
 .toolbars .btn i {
     margin-right: 10px;
+}
+
+.node-list {
+    padding: 10px;
+}
+
+.node-list .node {
+    border-bottom: #ccc 1px dotted;
+    padding: 10px;
+
+}
+
+.node-list .node .text {
+    height: 18px;
+    overflow: hidden;
+}
+
+.node-list .node:hover {
+    background-color: #def2fe;
+}
+
+.node-list .active {
+    background-color: #acdcff;
+}
+.empty{
+    color: #666;
 }
