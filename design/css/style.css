@@ -151,3 +151,6 @@ a {
     max-height: 100%;
 }
 
+.shape .text{
+    overflow: hidden;
+}

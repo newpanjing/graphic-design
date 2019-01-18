@@ -46,6 +46,6 @@ function componentInit() {
         },
         methods: {},
         computed: {},
-        template: `<div :class="{shape:true,active:data.active}" :style="style()"><div type="text">{{data.value}}</div></div>`
+        template: `<div :class="{shape:true,active:data.active}" :style="style()"><div class="text" type="text">{{data.value}}</div></div>`
     });
 }
