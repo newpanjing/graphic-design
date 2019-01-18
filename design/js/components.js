@@ -10,16 +10,16 @@ function componentInit() {
 
             var mappers = {
                 numbers: ['left', 'top', 'width', 'height', 'borderWidth', 'fontSize'],
-                strings: ['active', 'borderColor', 'borderStyle', 'fontColor', 'fontStyle']
+                strings: ['active', 'borderColor', 'borderStyle', 'fontColor', 'fontStyle', 'index']
             }
             var alias = {
-                fontColor: 'color'
+                fontColor: 'color',
+                index: 'z-index'
             };
 
             return {
                 data: shape,
                 style() {
-
                     var json = {};
                     for (var key in shape) {
                         var value = shape[key];
@@ -41,9 +41,7 @@ function componentInit() {
                 }
             }
         },
-        watch: {
-
-        },
+        watch: {},
         methods: {},
         computed: {},
         template: `<div :class="{shape:true,active:data.active}" :style="style()"><div v-if="data.type==0" class="text" type="text">{{data.value}}</div><div v-if="data.type==1" class="image"><img :src="data.value"/></div></div>`

@@ -23,7 +23,7 @@ function frameInit() {
             width: 60,
             height: 60,
             value: i,
-            type: 0
+            type: 0,
         })
     }
 
@@ -60,6 +60,7 @@ function pushShape(data) {
         }
     }
     app.shapes.push(data);
+    data.index = app.shapes.length;
 }
 
 /**
@@ -78,6 +79,9 @@ function initSelectArea() {
 
                 },
                 onHandler: function (data) {
+
+                    var count = 0;
+                    var tempShape = null;
                     app.shapes.forEach(item => {
                         //计算出每个item的x1 x2 y1 y2
                         var ix1 = item.left, ix2 = item.left + item.width;
@@ -87,8 +91,23 @@ function initSelectArea() {
                         var crash = (data.y2 >= iy1 && data.y1 <= iy2) && (data.x2 >= ix1 && data.x1 <= ix2);
                         item.active = crash;
                         item.selectArea = crash;
+                        if (crash) {
+                            tempShape = item;
+                            count++;
+                        }
                     });
 
+                    //如果只有一个，显示置顶和底菜单，并显示属性
+                    var single = count == 1;
+                    for (var i = 1; i < app.popup.menus.length; i++) {
+                        app.popup.menus[i].show = single;
+                    }
+
+                    if (single) {
+                        app.selectShape(null, tempShape);
+                    } else {
+                        app.selected = {}
+                    }
                 },
                 onEnd: function () {
 
@@ -264,19 +283,8 @@ function initApp() {
 
                     }
                 }, {
-                    split: true
-                }, {
-                    text: '置于顶层',
-                    icon: 'fa-angle-up',
-                    handler: function () {
-
-                    }
-                }, {
-                    text: '置于底层',
-                    icon: 'fa-angle-down',
-                    handler: function () {
-
-                    }
+                    split: true,
+                    show: true
                 }]
             },
             isShiftDown: false

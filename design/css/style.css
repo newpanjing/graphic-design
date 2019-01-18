@@ -79,6 +79,7 @@ a {
     display: table-cell;
     text-align: right;
     font-weight: 300;
+    vertical-align: top;
     /*color: #cfcfcf;*/
 }
 
@@ -153,6 +154,11 @@ a {
 
 .shape .text {
     overflow: hidden;
+    text-align: left;
+}
+.pro-box textarea{
+    width: 165px;
+    height: 175px;
 }
 
 .shape .image,.shape .image img {
