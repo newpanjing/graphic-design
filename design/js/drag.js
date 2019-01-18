@@ -35,7 +35,7 @@ function Drag(options) {
 
 
             //开关打开
-            isDown = true;
+            var isDown = true;
             //设置样式
             el.style.cursor = 'move';
 
@@ -43,7 +43,7 @@ function Drag(options) {
 
 
             window.onmousemove = function (e) {
-                if (isDown == false) {
+                if (!isDown) {
                     return;
                 }
                 //获取x和y

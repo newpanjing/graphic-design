@@ -16,24 +16,36 @@ function frameInit() {
     });
 
     for (var i = 0; i < 10; i++) {
+
         pushShape({
             left: i * 3 * 10,
             top: i * 3 * 10,
             width: 60,
             height: 60,
             value: i,
+            type: 0
         })
     }
+
 }
 
 function pushShape(data) {
+
+
+    //0=文本，1=图片
+
     //一个随机不重复的id，用于当前判断
     data.id = getShapeId();
-    data.active = false;
+    if (!data.active) {
+        data.active = false;
+    }
+    if (!data.type) {
+        data.type = 0;
+    }
     data.selectArea = false;
 
     var defaultData = {
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: '#000',
         borderStyle: 'solid',
 
@@ -42,8 +54,8 @@ function pushShape(data) {
         fontStyle: '',
         value: '文本标签',
     }
-    for(var key in defaultData){
-        if(!data[key]){
+    for (var key in defaultData) {
+        if (!data[key]) {
             data[key] = defaultData[key];
         }
     }
@@ -203,6 +215,20 @@ function initApp() {
                 left: 0,
                 top: 0,
                 menus: [{
+                    text: '插入文本',
+                    icon: 'fas fa-font',
+                    handler: function () {
+                        app.addShape(0, app.mousePos.x, app.mousePos.y);
+                    }
+                }, {
+                    text: '插入图片',
+                    icon: 'far fa-image',
+                    handler: function () {
+                        app.addShape(1, app.mousePos.x, app.mousePos.y);
+                    }
+                }, {
+                    split: true
+                }, {
                     text: '全选',
                     icon: 'fa-check',
                     handler: function () {
@@ -288,7 +314,9 @@ function initApp() {
                     }
                 });
                 shape.active = true;
-                e.preventDefault();
+                if (e) {
+                    e.preventDefault();
+                }
                 this.selected = shape;
                 this.isSelected = true;
             },
@@ -306,6 +334,12 @@ function initApp() {
                 cardMenu.top = e.clientY;
                 cardMenu.show = true;
                 app.popup.show = false;
+
+                //记录鼠标指针临时位置
+                app.mousePos = {
+                    x: e.clientX - e.target.offsetLeft,
+                    y: e.clientY - e.target.offsetTop
+                }
             },
             cardKeyup: function (e) {
                 if (e.keyCode == 9) {
@@ -351,6 +385,31 @@ function initApp() {
                 if (fun) {
                     fun.call(data, index);
                 }
+            },
+            addShape: function (type, x, y) {
+                x = x || 10;
+                y = y || 10;
+                var value = '文本';
+                var width = 60, height = 20;
+
+                //默认图片
+                if (type == 1) {
+                    value = './design/images/image.jpg';
+                    width = 120;
+                    height = 120;
+                }
+
+                var data = {
+                    left: x,
+                    top: y,
+                    width: width,
+                    height: height,
+                    value: value,
+                    type: type,
+                    active: true
+                };
+                app.selectShape(null, data);
+                pushShape(data)
             }
         }
     });

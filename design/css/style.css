@@ -146,11 +146,66 @@ a {
     outline: none;
 }
 
-.shape *:not(.border) {
+.shape *:not(.border,image) {
     max-width: 100%;
     max-height: 100%;
 }
 
-.shape .text{
+.shape .text {
     overflow: hidden;
+}
+
+.shape .image,.shape .image img {
+    height: 100%;
+    width: 100%;
+}
+
+.btn {
+    color: #fff;
+    background-color: #5cb85c;
+
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #4cae4c;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.btn:active {
+    color: #fff;
+    background-color: #397b39;
+    border-color: #2d652d;
+}
+
+.toolbars .item {
+    text-align: center;
+}
+
+.toolbars .btn {
+    min-width: 130px;
+}
+
+.toolbars .btn i {
+    margin-right: 10px;
 }

@@ -18,7 +18,7 @@
             <div class="item">
                 <div class="key">名称：</div>
                 <div class="value">
-                    <input type="input" v-model="card.name" placeholder="名称"/>
+                    <input style="width: 150px" type="input" v-model="card.name" placeholder="名称"/>
                 </div>
             </div>
 
@@ -55,15 +55,22 @@
 
         </div>
 
-        <div class="pro-box">
-            <div class="title">形状</div>
+        <div class="pro-box toolbars">
+            <div class="title">工具栏</div>
+            <div class="item">
+                <a href="javascript:;" @click="addShape(0)" class="btn"><i class="fas fa-font"></i><span>插入文本</span></a>
+            </div>
+            <div class="item">
+                <a href="javascript:;" @click="addShape(1)" class="btn"><i class="far fa-image"></i><span>插入图片</span></a>
+            </div>
         </div>
 
     </div>
     <div class="center"
          :style="{width:layout.center+'px',height:(layout.height-22)+'px','margin-right':layout.margin+'px'}">
 
-        <div @contextmenu.prevent.stop="showCardMenu($event)" v-selectarea="{aa:123}" tabindex="0" class="card" :style="{width:card.width+'px',height:card.height+'px'}"
+        <div @contextmenu.prevent.stop="showCardMenu($event)" v-selectarea="{aa:123}" tabindex="0" class="card"
+             :style="{width:card.width+'px',height:card.height+'px'}"
              @mousedown="cardClick($event)" @keydown="shapeMove($event)" @keyup="cardKeyup($event)">
 
             <!-- 各种元素 -->
@@ -99,9 +106,9 @@
                 <div class="item">
                     <div class="key">类型：</div>
                     <div class="value">
-                        <select>
-                            <option>文本</option>
-                            <option>图片</option>
+                        <select v-model="selected.type">
+                            <option value="0">文本</option>
+                            <option value="1">图片</option>
                         </select>
                     </div>
                 </div>
