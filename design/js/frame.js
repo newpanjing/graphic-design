@@ -20,9 +20,9 @@ function frameInit() {
         pushShape({
             left: i * 3 * 10,
             top: i * 3 * 10,
-            width: 60,
-            height: 60,
-            value: i,
+            width: 100,
+            height: 20,
+            value: new Date().getTime(),
             type: 0,
         })
     }
